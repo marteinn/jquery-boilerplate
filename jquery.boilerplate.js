@@ -54,6 +54,7 @@
     // e.g. $(element).defaultPluginName('functionName', arg1, arg2)
     $.fn[pluginName] = function ( options ) {
         var args = arguments;
+        var response;
         if (options === undefined || typeof options === 'object') {
             return this.each(function () {
                 if (!$.data(this, 'plugin_' + pluginName)) {
@@ -61,12 +62,13 @@
                 }
             });
         } else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
-            return this.each(function () {
+            this.each(function () {
                 var instance = $.data(this, 'plugin_' + pluginName);
                 if (instance instanceof Plugin && typeof instance[options] === 'function') {
-                    instance[options].apply( instance, Array.prototype.slice.call( args, 1 ) );
+                    response = instance[options].apply( instance, Array.prototype.slice.call( args, 1 ) );
                 }
             });
+            return response;
         }
     }
 
